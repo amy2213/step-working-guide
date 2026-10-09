@@ -2,7 +2,9 @@
   const steps = {
     1: window.STEP_ONE,
     2: window.STEP_TWO,
-    3: window.STEP_THREE
+    3: window.STEP_THREE,
+    4: window.STEP_FOUR,
+    5: window.STEP_FIVE
   };
 
   const workbook = document.getElementById('workbook');
@@ -48,7 +50,7 @@
         </section>`;
       }
       if(block.type === 'batchEnd'){
-        return `<aside class="batch-end"><div class="batch-end-label">Prototype milestone</div><div>${escapeHtml(block.text)}</div></aside>`;
+        return `<aside class="batch-end"><div class="batch-end-label">Build milestone</div><div>${escapeHtml(block.text)}</div></aside>`;
       }
       return '';
     }).join('');
