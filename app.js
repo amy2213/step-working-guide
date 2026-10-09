@@ -4,7 +4,10 @@
     2: window.STEP_TWO,
     3: window.STEP_THREE,
     4: window.STEP_FOUR,
-    5: window.STEP_FIVE
+    5: window.STEP_FIVE,
+    6: window.STEP_SIX,
+    7: window.STEP_SEVEN,
+    8: window.STEP_EIGHT
   };
 
   const workbook = document.getElementById('workbook');
