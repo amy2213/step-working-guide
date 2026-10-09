@@ -1,27 +1,38 @@
 (() => {
-  const data = window.STEP_ONE;
+  const steps = {
+    1: window.STEP_ONE,
+    2: window.STEP_TWO
+  };
+
   const workbook = document.getElementById('workbook');
   const privacyBtn = document.getElementById('privacyBtn');
   const progressFill = document.getElementById('progressFill');
   const progressText = document.getElementById('progressText');
   const clearBtn = document.getElementById('clearBtn');
   const printBtn = document.getElementById('printBtn');
-  const storagePrefix = 'step-working-guide:v1:step1:';
+  const brandStep = document.getElementById('brandStep');
+  const stepTabs = [...document.querySelectorAll('.step-tab')];
+
+  let activeStep = Number(localStorage.getItem('step-working-guide:active-step') || 1);
+  if (!steps[activeStep]) activeStep = 1;
   let privateMode = false;
   let questionIndex = 0;
 
   const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
 
-  function answerKey(index){ return `${storagePrefix}q${index}`; }
+  const storagePrefix = stepNumber => `step-working-guide:v1:step${stepNumber}:`;
+  const answerKey = index => `${storagePrefix(activeStep)}q${index}`;
 
   function render(){
+    const data = steps[activeStep];
     questionIndex = 0;
+
     const blocks = data.blocks.map(block => {
       if(block.type === 'paragraph'){
         return `<p class="reading">${escapeHtml(block.text)}</p>`;
       }
       if(block.type === 'section'){
-        return `<section class="section-heading"><div class="section-eyebrow">Step One</div><h2>${escapeHtml(block.title)}</h2><span class="source-ref">Source page ${block.sourcePage}</span></section>`;
+        return `<section class="section-heading"><div class="section-eyebrow">${escapeHtml(data.title)}</div><h2>${escapeHtml(block.title)}</h2><span class="source-ref">Source page ${block.sourcePage}</span></section>`;
       }
       if(block.type === 'question'){
         questionIndex += 1;
@@ -41,6 +52,10 @@
 
     workbook.innerHTML = `<header class="step-hero"><div class="step-label">Narcotics Anonymous Step Working Guide</div><h1 class="step-title">${escapeHtml(data.title)}</h1><blockquote class="step-quote">“${escapeHtml(data.quote)}”</blockquote></header><div class="content">${blocks}</div>`;
 
+    brandStep.textContent = data.title;
+    document.title = `${data.title} · Step Working Guide`;
+    stepTabs.forEach(tab => tab.classList.toggle('active', Number(tab.dataset.step) === activeStep));
+
     workbook.querySelectorAll('textarea').forEach(area => {
       grow(area);
       area.addEventListener('input', () => {
@@ -50,6 +65,7 @@
       });
     });
     updateProgress();
+    document.body.classList.toggle('private', privateMode);
   }
 
   function grow(area){
@@ -66,6 +82,16 @@
     progressText.textContent = `${answered} of ${total} reflections answered`;
   }
 
+  function switchStep(stepNumber){
+    if(!steps[stepNumber]) return;
+    activeStep = stepNumber;
+    localStorage.setItem('step-working-guide:active-step', String(activeStep));
+    render();
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  stepTabs.forEach(tab => tab.addEventListener('click', () => switchStep(Number(tab.dataset.step))));
+
   privacyBtn.addEventListener('click', () => {
     privateMode = !privateMode;
     document.body.classList.toggle('private', privateMode);
@@ -73,8 +99,8 @@
   });
 
   clearBtn.addEventListener('click', () => {
-    if(!confirm('Clear all Step One responses saved on this device?')) return;
-    Object.keys(localStorage).filter(key => key.startsWith(storagePrefix)).forEach(key => localStorage.removeItem(key));
+    if(!confirm(`Clear all ${steps[activeStep].title} responses saved on this device?`)) return;
+    Object.keys(localStorage).filter(key => key.startsWith(storagePrefix(activeStep))).forEach(key => localStorage.removeItem(key));
     render();
   });
 
