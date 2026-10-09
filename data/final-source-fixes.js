@@ -1,5 +1,8 @@
 (() => {
   const step3 = window.STEP_THREE;
+  const step5 = window.STEP_FIVE;
+  const step6 = window.STEP_SIX;
+  const step7 = window.STEP_SEVEN;
   const step11 = window.STEP_ELEVEN;
   const step12 = window.STEP_TWELVE;
 
@@ -7,6 +10,13 @@
     if (!step || !Array.isArray(step.blocks)) return;
     const block = step.blocks.find(item => item.type === 'paragraph' && item.text.includes(contains));
     if (block) block.text = text;
+  };
+
+  const insertParagraphBefore = (step, matcher, text) => {
+    if (!step || !Array.isArray(step.blocks)) return;
+    if (step.blocks.some(item => item.type === 'paragraph' && item.text === text)) return;
+    const index = step.blocks.findIndex(matcher);
+    if (index >= 0) step.blocks.splice(index, 0, {type:'paragraph', text});
   };
 
   if (step3) {
@@ -32,6 +42,48 @@
       step3,
       "There is a spiritual progression from hope to faith to trust in the Third Step",
       "There is a spiritual progression from hope to faith to trust in the Third Step. As we begin Step Three, we carry with us the sense of hope that was born in us as we worked the Second Step. Hope springs from the knowledge that our life is full of possibilities-there are no hard certainties yet, just the first whispers of anticipation that we just may be able to fulfill our heart's deepest desires. Emerging doubts fade as hope becomes faith. Faith propels us forward into action; we actually do the work that those who have faith in us are telling us is necessary if we are to achieve what we want. In the Third Step, faith gives us the capacity to actually make a decision and carry that decision into action. Trust comes into play after faith has been applied. We have probably made significant progress toward fulfilling our goals; now we have evidence that we can influence the course of our lives through taking positive action."
+    );
+  }
+
+  if (step5) {
+    replaceParagraph(
+      step5,
+      "At some point in this process, we will probably begin calling certain patterns of behavior our",
+      "At some point in this process, we will probably begin calling certain patterns of behavior our \"character defects.\" Though it won't be until the Sixth Step that we begin an in-depth examination of how each one of our defects plays a role in keeping us sick, it certainly won't hurt to begin this knowledge forming in us now."
+    );
+  }
+
+  if (step6) {
+    replaceParagraph(
+      step6,
+      "We begin working Step Six full of the hope we have developed in the first five steps",
+      "We begin working Step Six full of the hope we have developed in the first five steps. If we have been thorough, we have also developed some humility. In Step Six, \"humility\" means that we're able to see ourselves more clearly. We've seen the exact nature of our wrongs. We've seen how we've harmed ourselves and others by acting on our defects of character. We've seen the patterns of our behavior, and we've come to understand how we are likely to act on the same defects over and over. Now we have to become entirely ready to have our defects of character removed."
+    );
+
+    insertParagraphBefore(
+      step6,
+      item => item.type === 'section' && item.title === 'Entirely Ready For What?',
+      "The inventory process itself has raised our awareness about our character defects; working the Sixth Step will do so even more. To be entirely ready is to reach a spiritual state where we are not just aware of our defects, not just tired of them, not just confident that the God of our understanding will remove what should go-but all these things."
+    );
+
+    insertParagraphBefore(
+      step6,
+      item => item.type === 'section' && item.title === 'Entirely Ready For What?',
+      "In order to become entirely ready, we'll need to address our fears about the Sixth Step. We'll also need to take a look at how our defects will be removed. The Sixth Step says that only a Higher Power can remove them, but what does that mean in practical terms? What is our responsibility in the Sixth Step? These questions, when reviewed with a sponsor, will help give us direction in working this step."
+    );
+
+    insertParagraphBefore(
+      step6,
+      item => item.type === 'question' && item.text.startsWith('How am I trying to remove or control my own character defects?'),
+      "What we need to do in the Sixth Step is much like what we had to do in the first two steps. We have to admit that we have been defeated by an internal force that has brought nothing but pain and degradation to our lives; then, we have to admit we need help in dealing with that force. We must completely accept the fact that we cannot remove our own shortcomings, and we must prepare ourselves to ask in the Seventh Step for God to remove them for us."
+    );
+  }
+
+  if (step7) {
+    replaceParagraph(
+      step7,
+      "Many of us came to NA with a certain street mentality",
+      "Many of us came to NA with a certain \"street\" mentality. The only way we knew to get what we wanted was by approaching it indirectly and manipulating people. We didn't realize that we could just be forthright and have the same chance, if not better, of fulfilling our needs. We spent years learning to blank our facial expressions, hide our compassion, and harden ourselves. By the time we arrived in NA, we were very good at it-so good, in fact, that novice addicts were probably looking to our example the same way we looked to older addicts when we first started using. We learned to suppress all humanity and became, in many cases, completely inhuman."
     );
   }
 
