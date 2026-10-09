@@ -31,6 +31,21 @@
   const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
   const storagePrefix = stepNumber => `step-working-guide:v1:step${stepNumber}:`;
   const answerKey = index => `${storagePrefix(activeStep)}q${index}`;
+  const questionCountFor = stepNumber => steps[stepNumber].blocks.filter(block => block.type === 'question').length;
+
+  function overallProgress(){
+    let total = 0;
+    let answered = 0;
+    Object.keys(steps).forEach(key => {
+      const stepNumber = Number(key);
+      const count = questionCountFor(stepNumber);
+      total += count;
+      for(let i = 1; i <= count; i += 1){
+        if((localStorage.getItem(`${storagePrefix(stepNumber)}q${i}`) || '').trim()) answered += 1;
+      }
+    });
+    return {total, answered, percent: total ? Math.round(answered / total * 100) : 0};
+  }
 
   function render(){
     const data = steps[activeStep];
@@ -62,11 +77,17 @@
       return '';
     }).join('');
 
-    workbook.innerHTML = `<header class="step-hero"><div class="step-label">Narcotics Anonymous Step Working Guide</div><h1 class="step-title">${escapeHtml(data.title)}</h1><blockquote class="step-quote">“${escapeHtml(data.quote)}”</blockquote></header><div class="content">${blocks}</div>`;
+    const previous = activeStep > 1 ? `<button class="step-move" type="button" data-move="${activeStep - 1}">← Step ${activeStep - 1}</button>` : '<span></span>';
+    const next = activeStep < 12 ? `<button class="step-move primary" type="button" data-move="${activeStep + 1}">Step ${activeStep + 1} →</button>` : '<span></span>';
+
+    workbook.innerHTML = `<header class="step-hero"><div class="step-label">Narcotics Anonymous Step Working Guide · Step ${activeStep} of 12</div><h1 class="step-title">${escapeHtml(data.title)}</h1><blockquote class="step-quote">“${escapeHtml(data.quote)}”</blockquote></header><div class="content">${blocks}<nav class="step-footer-nav" aria-label="Previous and next step">${previous}${next}</nav></div>`;
 
     brandStep.textContent = data.title;
     document.title = `${data.title} · Step Working Guide`;
-    stepTabs.forEach(tab => tab.classList.toggle('active', Number(tab.dataset.step) === activeStep));
+    stepTabs.forEach(tab => {
+      tab.classList.toggle('active', Number(tab.dataset.step) === activeStep);
+      if(Number(tab.dataset.step) === activeStep) tab.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+    });
 
     workbook.querySelectorAll('textarea').forEach(area => {
       grow(area);
@@ -76,6 +97,7 @@
         updateProgress();
       });
     });
+    workbook.querySelectorAll('[data-move]').forEach(button => button.addEventListener('click', () => switchStep(Number(button.dataset.move))));
     updateProgress();
     document.body.classList.toggle('private', privateMode);
   }
@@ -90,8 +112,9 @@
     const answered = fields.filter(field => field.value.trim().length > 0).length;
     const total = fields.length;
     const percent = total ? Math.round(answered / total * 100) : 0;
+    const overall = overallProgress();
     progressFill.style.width = `${percent}%`;
-    progressText.textContent = `${answered} of ${total} reflections answered`;
+    progressText.textContent = `${answered} of ${total} in this step · ${overall.answered} of ${overall.total} overall`;
   }
 
   function switchStep(stepNumber){
