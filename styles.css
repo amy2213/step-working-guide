@@ -24,6 +24,10 @@ button{cursor:pointer}
 .top-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 .ghost-btn{border:1px solid var(--rule);background:rgba(255,253,248,.86);padding:8px 11px;border-radius:999px;color:var(--ink);font-size:13px}
 .ghost-btn:hover{border-color:var(--sage);color:var(--sage-deep)}
+.step-nav{max-width:900px;margin:auto;padding:0 22px 10px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.step-nav::-webkit-scrollbar{display:none}
+.step-tab{border:1px solid var(--rule);background:rgba(255,253,248,.7);color:var(--muted);padding:7px 12px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
+.step-tab.active{background:var(--sage);border-color:var(--sage);color:white}
 .progress-shell{max-width:900px;margin:auto;padding:0 22px 12px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
 .progress-bar{height:5px;background:#dcd6c9;border-radius:999px;overflow:hidden}
 .progress-bar>div{height:100%;width:0;background:var(--sage);transition:width .2s ease}
@@ -54,8 +58,8 @@ textarea:focus{border-color:var(--sage);box-shadow:0 0 0 3px rgba(83,107,92,.10)
 .text-btn{border:0;background:transparent;padding:0;color:var(--sage-deep);text-decoration:underline;text-underline-offset:3px}
 .source-ref{display:none}
 @media(max-width:650px){
-  .topbar-inner{padding:12px 14px 8px;align-items:flex-start}
-  .brand{font-size:20px}.kicker{font-size:9px}.ghost-btn{font-size:11px;padding:7px 9px}.top-actions{gap:5px}
+  .topbar-inner{padding:12px 14px 8px;align-items:flex-start}.brand{font-size:20px}.kicker{font-size:9px}.ghost-btn{font-size:11px;padding:7px 9px}.top-actions{gap:5px}
+  .step-nav{padding:0 14px 9px}.step-tab{font-size:11px;padding:6px 10px}
   .progress-shell{padding:0 14px 9px;grid-template-columns:1fr}.progress-text{display:none}
   .page-shell{padding:18px 10px 88px}.workbook{border-radius:20px}.step-hero{padding:38px 22px 34px}.content{padding:8px 18px 48px}
   .reading{font-size:17px;margin:24px 0}.section-heading{margin-top:44px}.reflection{padding:18px 16px;margin:24px 0 28px}.reflection-top{gap:10px}.question{font-size:16px}textarea{min-height:170px}
