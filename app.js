@@ -1,7 +1,8 @@
 (() => {
   const steps = {
     1: window.STEP_ONE,
-    2: window.STEP_TWO
+    2: window.STEP_TWO,
+    3: window.STEP_THREE
   };
 
   const workbook = document.getElementById('workbook');
@@ -19,7 +20,6 @@
   let questionIndex = 0;
 
   const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
-
   const storagePrefix = stepNumber => `step-working-guide:v1:step${stepNumber}:`;
   const answerKey = index => `${storagePrefix(activeStep)}q${index}`;
 
@@ -46,6 +46,9 @@
           <textarea data-key="${answerKey(questionIndex)}" aria-label="Response to reflection ${questionIndex}" placeholder="Begin writing here...">${escapeHtml(saved)}</textarea>
           <div class="save-row"><span class="saved-dot">Saved on this device</span><span class="source-ref">Source page ${block.sourcePage}</span></div>
         </section>`;
+      }
+      if(block.type === 'batchEnd'){
+        return `<aside class="batch-end"><div class="batch-end-label">Prototype milestone</div><div>${escapeHtml(block.text)}</div></aside>`;
       }
       return '';
     }).join('');
