@@ -3,38 +3,42 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#f5f1e8">
+  <meta name="theme-color" content="#f3efe6">
+  <meta name="color-scheme" content="light">
   <title>Step Working Guide</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="topbar">
     <div class="topbar-inner">
-      <div>
+      <div class="brand-wrap">
         <div class="kicker">Interactive Step Working Guide</div>
         <div id="brandStep" class="brand">Step One</div>
       </div>
-      <div class="top-actions">
-        <button id="privacyBtn" class="ghost-btn" type="button">Hide responses</button>
+      <div class="top-actions" aria-label="Workbook actions">
+        <button id="privacyBtn" class="ghost-btn" type="button" aria-pressed="false">Hide responses</button>
+        <button id="exportBtn" class="ghost-btn" type="button">Export</button>
         <button id="printBtn" class="ghost-btn" type="button">Print / PDF</button>
       </div>
     </div>
+
     <nav class="step-nav" aria-label="Step navigation">
-      <button class="step-tab active" type="button" data-step="1">Step One</button>
-      <button class="step-tab" type="button" data-step="2">Step Two</button>
-      <button class="step-tab" type="button" data-step="3">Step Three</button>
-      <button class="step-tab" type="button" data-step="4">Step Four</button>
-      <button class="step-tab" type="button" data-step="5">Step Five</button>
-      <button class="step-tab" type="button" data-step="6">Step Six</button>
-      <button class="step-tab" type="button" data-step="7">Step Seven</button>
-      <button class="step-tab" type="button" data-step="8">Step Eight</button>
-      <button class="step-tab" type="button" data-step="9">Step Nine</button>
-      <button class="step-tab" type="button" data-step="10">Step Ten</button>
-      <button class="step-tab" type="button" data-step="11">Step Eleven</button>
-      <button class="step-tab" type="button" data-step="12">Step Twelve</button>
+      <button class="step-tab active" type="button" data-step="1">1</button>
+      <button class="step-tab" type="button" data-step="2">2</button>
+      <button class="step-tab" type="button" data-step="3">3</button>
+      <button class="step-tab" type="button" data-step="4">4</button>
+      <button class="step-tab" type="button" data-step="5">5</button>
+      <button class="step-tab" type="button" data-step="6">6</button>
+      <button class="step-tab" type="button" data-step="7">7</button>
+      <button class="step-tab" type="button" data-step="8">8</button>
+      <button class="step-tab" type="button" data-step="9">9</button>
+      <button class="step-tab" type="button" data-step="10">10</button>
+      <button class="step-tab" type="button" data-step="11">11</button>
+      <button class="step-tab" type="button" data-step="12">12</button>
     </nav>
-    <div class="progress-shell" aria-label="Step progress">
-      <div class="progress-bar"><div id="progressFill"></div></div>
+
+    <div class="progress-shell" aria-label="Workbook progress">
+      <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progressFill"></div></div>
       <div id="progressText" class="progress-text">0 of 0 reflections answered</div>
     </div>
   </header>
