@@ -16,7 +16,9 @@
 
   const workbook = document.getElementById('workbook');
   const privacyBtn = document.getElementById('privacyBtn');
+  const exportBtn = document.getElementById('exportBtn');
   const progressFill = document.getElementById('progressFill');
+  const progressBar = document.querySelector('.progress-bar');
   const progressText = document.getElementById('progressText');
   const clearBtn = document.getElementById('clearBtn');
   const printBtn = document.getElementById('printBtn');
@@ -25,54 +27,62 @@
 
   let activeStep = Number(localStorage.getItem('step-working-guide:active-step') || 1);
   if (!steps[activeStep]) activeStep = 1;
-  let privateMode = false;
-  let questionIndex = 0;
+  let privateMode = localStorage.getItem('step-working-guide:private-mode') === '1';
 
   const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
-  const storagePrefix = stepNumber => `step-working-guide:v1:step${stepNumber}:`;
-  const answerKey = index => `${storagePrefix(activeStep)}q${index}`;
-  const questionCountFor = stepNumber => steps[stepNumber].blocks.filter(block => block.type === 'question').length;
+  const storagePrefix = stepNumber => `step-working-guide:v2:step${stepNumber}:`;
+  const legacyPrefix = stepNumber => `step-working-guide:v1:step${stepNumber}:`;
+  const questionBlocksFor = stepNumber => steps[stepNumber].blocks.filter(block => block.type === 'question');
+  const normalizeQuestion = text => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 80);
+  const answerKey = (stepNumber, block, ordinal) => `${storagePrefix(stepNumber)}${normalizeQuestion(block.text)}:${ordinal}`;
+
+  function migrateLegacyAnswers(stepNumber){
+    const questions = questionBlocksFor(stepNumber);
+    questions.forEach((block, index) => {
+      const legacyKey = `${legacyPrefix(stepNumber)}q${index + 1}`;
+      const newKey = answerKey(stepNumber, block, index + 1);
+      if(localStorage.getItem(newKey) === null && localStorage.getItem(legacyKey) !== null){
+        localStorage.setItem(newKey, localStorage.getItem(legacyKey));
+      }
+    });
+  }
+
+  Object.keys(steps).forEach(key => migrateLegacyAnswers(Number(key)));
 
   function overallProgress(){
     let total = 0;
     let answered = 0;
     Object.keys(steps).forEach(key => {
       const stepNumber = Number(key);
-      const count = questionCountFor(stepNumber);
-      total += count;
-      for(let i = 1; i <= count; i += 1){
-        if((localStorage.getItem(`${storagePrefix(stepNumber)}q${i}`) || '').trim()) answered += 1;
-      }
+      const questions = questionBlocksFor(stepNumber);
+      total += questions.length;
+      questions.forEach((block, index) => {
+        if((localStorage.getItem(answerKey(stepNumber, block, index + 1)) || '').trim()) answered += 1;
+      });
     });
     return {total, answered, percent: total ? Math.round(answered / total * 100) : 0};
   }
 
   function render(){
     const data = steps[activeStep];
-    questionIndex = 0;
+    let questionIndex = 0;
 
     const blocks = data.blocks.map(block => {
-      if(block.type === 'paragraph'){
-        return `<p class="reading">${escapeHtml(block.text)}</p>`;
-      }
-      if(block.type === 'section'){
-        return `<section class="section-heading"><div class="section-eyebrow">${escapeHtml(data.title)}</div><h2>${escapeHtml(block.title)}</h2><span class="source-ref">Source page ${block.sourcePage}</span></section>`;
-      }
+      if(block.type === 'paragraph') return `<p class="reading">${escapeHtml(block.text)}</p>`;
+      if(block.type === 'section') return `<section class="section-heading"><div class="section-eyebrow">${escapeHtml(data.title)}</div><h2>${escapeHtml(block.title)}</h2><span class="source-ref">Source page ${block.sourcePage}</span></section>`;
       if(block.type === 'question'){
         questionIndex += 1;
-        const saved = localStorage.getItem(answerKey(questionIndex)) || '';
+        const key = answerKey(activeStep, block, questionIndex);
+        const saved = localStorage.getItem(key) || '';
         return `<section class="reflection" data-question="${questionIndex}">
           <div class="reflection-top">
-            <div class="reflection-number">${questionIndex}</div>
-            <div><div class="reflection-label">Reflection</div><div class="question">${escapeHtml(block.text)}</div></div>
+            <div class="reflection-number" aria-hidden="true">${questionIndex}</div>
+            <div class="reflection-copy"><div class="reflection-label">Reflection</div><div class="question">${escapeHtml(block.text)}</div></div>
           </div>
-          <div class="response-label">Your response</div>
-          <textarea data-key="${answerKey(questionIndex)}" aria-label="Response to reflection ${questionIndex}" placeholder="Begin writing here...">${escapeHtml(saved)}</textarea>
+          <label class="response-label" for="response-${activeStep}-${questionIndex}">Your response</label>
+          <textarea id="response-${activeStep}-${questionIndex}" data-key="${escapeHtml(key)}" aria-label="Response to reflection ${questionIndex}" placeholder="Begin writing here...">${escapeHtml(saved)}</textarea>
           <div class="save-row"><span class="saved-dot">Saved on this device</span><span class="source-ref">Source page ${block.sourcePage}</span></div>
         </section>`;
-      }
-      if(block.type === 'batchEnd'){
-        return `<aside class="batch-end"><div class="batch-end-label">Build milestone</div><div>${escapeHtml(block.text)}</div></aside>`;
       }
       return '';
     }).join('');
@@ -85,26 +95,49 @@
     brandStep.textContent = data.title;
     document.title = `${data.title} · Step Working Guide`;
     stepTabs.forEach(tab => {
-      tab.classList.toggle('active', Number(tab.dataset.step) === activeStep);
-      if(Number(tab.dataset.step) === activeStep) tab.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+      const isActive = Number(tab.dataset.step) === activeStep;
+      tab.classList.toggle('active', isActive);
+      tab.setAttribute('aria-current', isActive ? 'step' : 'false');
+      if(isActive) tab.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
     });
 
     workbook.querySelectorAll('textarea').forEach(area => {
       grow(area);
+      let saveTimer;
       area.addEventListener('input', () => {
-        localStorage.setItem(area.dataset.key, area.value);
         grow(area);
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(() => {
+          localStorage.setItem(area.dataset.key, area.value);
+          updateProgress();
+          flashSaved(area);
+        }, 150);
+      });
+      area.addEventListener('blur', () => {
+        localStorage.setItem(area.dataset.key, area.value);
         updateProgress();
       });
     });
+
     workbook.querySelectorAll('[data-move]').forEach(button => button.addEventListener('click', () => switchStep(Number(button.dataset.move))));
-    updateProgress();
     document.body.classList.toggle('private', privateMode);
+    privacyBtn.textContent = privateMode ? 'Show responses' : 'Hide responses';
+    privacyBtn.setAttribute('aria-pressed', privateMode ? 'true' : 'false');
+    updateProgress();
   }
 
   function grow(area){
     area.style.height = 'auto';
-    area.style.height = `${Math.max(154, area.scrollHeight)}px`;
+    area.style.height = `${Math.max(168, area.scrollHeight)}px`;
+  }
+
+  function flashSaved(area){
+    const row = area.nextElementSibling;
+    const status = row?.querySelector('.saved-dot');
+    if(!status) return;
+    status.textContent = 'Saved just now';
+    clearTimeout(status._timer);
+    status._timer = setTimeout(() => status.textContent = 'Saved on this device', 1200);
   }
 
   function updateProgress(){
@@ -114,6 +147,7 @@
     const percent = total ? Math.round(answered / total * 100) : 0;
     const overall = overallProgress();
     progressFill.style.width = `${percent}%`;
+    progressBar.setAttribute('aria-valuenow', String(percent));
     progressText.textContent = `${answered} of ${total} in this step · ${overall.answered} of ${overall.total} overall`;
   }
 
@@ -125,20 +159,53 @@
     window.scrollTo({top:0, behavior:'smooth'});
   }
 
+  function exportResponses(){
+    const payload = {
+      exportedAt: new Date().toISOString(),
+      workbook: 'Step Working Guide',
+      steps: Object.keys(steps).map(key => {
+        const stepNumber = Number(key);
+        const data = steps[stepNumber];
+        let ordinal = 0;
+        const responses = data.blocks.filter(block => block.type === 'question').map(block => {
+          ordinal += 1;
+          return {
+            number: ordinal,
+            question: block.text,
+            response: localStorage.getItem(answerKey(stepNumber, block, ordinal)) || ''
+          };
+        });
+        return {step: stepNumber, title: data.title, responses};
+      })
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'step-working-guide-responses.json';
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    URL.revokeObjectURL(url);
+  }
+
   stepTabs.forEach(tab => tab.addEventListener('click', () => switchStep(Number(tab.dataset.step))));
 
   privacyBtn.addEventListener('click', () => {
     privateMode = !privateMode;
+    localStorage.setItem('step-working-guide:private-mode', privateMode ? '1' : '0');
     document.body.classList.toggle('private', privateMode);
     privacyBtn.textContent = privateMode ? 'Show responses' : 'Hide responses';
+    privacyBtn.setAttribute('aria-pressed', privateMode ? 'true' : 'false');
   });
 
   clearBtn.addEventListener('click', () => {
     if(!confirm(`Clear all ${steps[activeStep].title} responses saved on this device?`)) return;
-    Object.keys(localStorage).filter(key => key.startsWith(storagePrefix(activeStep))).forEach(key => localStorage.removeItem(key));
+    Object.keys(localStorage).filter(key => key.startsWith(storagePrefix(activeStep)) || key.startsWith(legacyPrefix(activeStep))).forEach(key => localStorage.removeItem(key));
     render();
   });
 
+  exportBtn.addEventListener('click', exportResponses);
   printBtn.addEventListener('click', () => window.print());
 
   render();
