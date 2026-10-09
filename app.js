@@ -7,7 +7,9 @@
     5: window.STEP_FIVE,
     6: window.STEP_SIX,
     7: window.STEP_SEVEN,
-    8: window.STEP_EIGHT
+    8: window.STEP_EIGHT,
+    9: window.STEP_NINE,
+    10: window.STEP_TEN
   };
 
   const workbook = document.getElementById('workbook');
