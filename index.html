@@ -12,13 +12,17 @@
     <div class="topbar-inner">
       <div>
         <div class="kicker">Interactive Step Working Guide</div>
-        <div class="brand">Step One</div>
+        <div id="brandStep" class="brand">Step One</div>
       </div>
       <div class="top-actions">
         <button id="privacyBtn" class="ghost-btn" type="button">Hide responses</button>
         <button id="printBtn" class="ghost-btn" type="button">Print / PDF</button>
       </div>
     </div>
+    <nav class="step-nav" aria-label="Step navigation">
+      <button class="step-tab active" type="button" data-step="1">Step One</button>
+      <button class="step-tab" type="button" data-step="2">Step Two</button>
+    </nav>
     <div class="progress-shell" aria-label="Step progress">
       <div class="progress-bar"><div id="progressFill"></div></div>
       <div id="progressText" class="progress-text">0 of 0 reflections answered</div>
@@ -31,10 +35,11 @@
 
   <footer class="footer">
     <span>Responses save automatically on this device.</span>
-    <button id="clearBtn" type="button" class="text-btn">Clear saved responses</button>
+    <button id="clearBtn" type="button" class="text-btn">Clear saved responses for this step</button>
   </footer>
 
   <script src="data/step-1.js"></script>
+  <script src="data/step-2.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
