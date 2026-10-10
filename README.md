@@ -1,49 +1,57 @@
 # Interactive Step Working Guide
 
-A source-verified, native-text, fillable Twelve Step Working Guide workbook.
+A source-verified digital working guide for all Twelve Steps, available as both a fillable PDF workbook and a responsive browser workbook.
 
-## Approved release
+## Current release
 
-**Version:** 1.0  
-**Approved:** October 10, 2026
+**Version 1.0 - approved October 10, 2026**
 
-The approved master workbook contains:
+- 12 complete steps
+- 86 major sections
+- 460 reflection questions
+- 243-page complete interactive PDF
+- 460 live multiline PDF fields with no character limit
+- native searchable/selectable PDF text
+- responsive browser workbook with local autosave
+- response export/import for browser backups
+- hide/show response privacy control
+- print / Save as PDF support
 
-- 12 steps
-- 243 PDF pages, including master cover and contents
-- 460 live multiline reflection fields
-- no field character limits
-- native selectable/searchable text
-- clickable master contents and step-level navigation
-- source-fidelity corrections identified through a page-by-page audit
+## GitHub Pages workbook
 
-The GitHub Pages site documents the approved release, its workbook map, QA status, and artifact checksums. Generated binary release files are maintained separately from the source tree.
+The main GitHub Pages URL is the working browser edition:
 
-## Source fidelity
+`https://amy2213.github.io/step-working-guide/`
 
-The earlier browser prototype used structured JavaScript data. During the final PDF build, a full audit found that some narrative in that dataset had been shortened or omitted. The final workbook was therefore rebuilt and verified against the original source pages rather than treating the browser dataset as authoritative.
+The web workbook was rebuilt after a narrative-fidelity audit against the approved v1.0 PDFs. Steps that had any condensed or omitted narrative use PDF-derived replacement data. Previously transcribed blocks are reused only for steps that passed the source-fidelity audit, with the known source corrections applied before rendering. The earlier browser prototype remains under `archive/browser-prototype/` for development history.
 
-The **approved v1.0 PDF is the canonical release**.
+### Browser response storage
 
-The previous browser prototype is retained under `archive/browser-prototype/` for development history only. It should not be treated as the canonical text source.
+Responses are saved to browser `localStorage` on the current device. They are not sent to a server by this project. Use **Export answers** to create a JSON backup and **Import answers** to restore one.
 
-## Repository structure
+## Repository layout
 
-- `index.html` - GitHub Pages release site
-- `styles.css` - release-site design system
-- `RELEASE_NOTES.md` - v1.0 release notes and QA summary
-- `release/ARTIFACTS.md` - artifact names, counts, and SHA-256 checksums
-- `release/MANIFEST.csv` - machine-readable release manifest
-- `archive/browser-prototype/` - earlier local-first browser prototype
+- `index.html` - active interactive workbook
+- `styles.css` - responsive workbook and release-page design
+- `app.js` - rendering, autosave, progress, privacy, export/import, step navigation
+- `data/step-*.js` - source-verified PDF-derived step data and canonical step fragments
+- `data/bootstrap.js` - assembles and validates all 12 active steps at runtime
+- `release.html` - v1.0 release information
+- `RELEASE_NOTES.md` - release history
+- `QA_REPORT.md` - current PDF and browser QA results
+- `release/ARTIFACTS.md` - artifact manifest and checksums
+- `release/MANIFEST.csv` - release metadata
+- `archive/browser-prototype/` - superseded pre-audit browser prototype
 
-## Privacy
+## Canonical-source rule
 
-The fillable workbook is designed so responses remain in the PDF file the user saves. The GitHub Pages release site does not collect workbook responses.
+The approved v1.0 PDFs are the canonical release. The browser dataset is generated from those definitive PDFs so that the web edition cannot silently reintroduce condensed narrative from the older JavaScript prototype.
 
-## Planned next phase
+## Planned work
 
-An **expanded-answer archival export** is planned. It will take completed form responses and rebuild them as flowing native text so long answers can expand naturally across additional pages.
+- expanded-answer archival PDF export, where long responses are re-typeset into flowing pages
+- optional Step Four inventory companion workbook
 
 ## Disclaimer
 
-Independent digital workbook project. Not affiliated with or endorsed by Narcotics Anonymous World Services, Inc.
+This is an independent digital workbook project. It is not affiliated with or endorsed by Narcotics Anonymous World Services, Inc.
