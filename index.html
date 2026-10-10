@@ -2,132 +2,80 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f3efe6">
-  <meta name="color-scheme" content="light">
-  <meta name="description" content="Source-verified, native-text, fillable Twelve Step Working Guide workbook with 460 reflection fields.">
+  <meta name="description" content="Interactive, source-verified Twelve Step Working Guide with local autosave and 460 reflections.">
   <title>Interactive Step Working Guide</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="site-header">
-    <div class="nav-shell">
-      <a class="brand" href="#top" aria-label="Interactive Step Working Guide home">
-        <span class="brand-kicker">Interactive</span>
-        <span class="brand-name">Step Working Guide</span>
-      </a>
-      <nav class="nav-links" aria-label="Primary navigation">
-        <a href="#release">Release</a>
-        <a href="#steps">Steps</a>
-        <a href="#about">About</a>
-        <a href="https://github.com/amy2213/step-working-guide">GitHub</a>
-      </nav>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand-wrap">
+        <div class="kicker">Interactive Step Working Guide</div>
+        <div id="brandStep" class="brand">Step One</div>
+      </div>
+      <div class="top-actions" aria-label="Workbook actions">
+        <button id="privacyBtn" class="ghost-btn" type="button" aria-pressed="false">Hide responses</button>
+        <button id="exportBtn" class="ghost-btn" type="button">Export answers</button>
+        <label class="ghost-btn import-label" for="importFile">Import answers</label>
+        <input id="importFile" class="sr-only" type="file" accept="application/json,.json">
+        <button id="printBtn" class="ghost-btn" type="button">Print / PDF</button>
+        <a class="ghost-btn link-btn" href="release.html">Release info</a>
+      </div>
+    </div>
+
+    <nav id="stepNav" class="step-nav" aria-label="Step navigation"></nav>
+
+    <div class="progress-shell" aria-label="Workbook progress">
+      <div class="progress-row">
+        <span id="progressText">0 of 0 reflections answered in this step</span>
+        <span id="overallProgressText">0 of 460 overall</span>
+      </div>
+      <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div id="progressFill"></div>
+      </div>
     </div>
   </header>
 
-  <main id="top">
-    <section class="hero section-shell">
-      <div class="hero-copy">
-        <p class="eyebrow">Approved v1.0 release</p>
-        <h1>A complete digital Step Working Guide built for actually doing the work.</h1>
-        <p class="lede">Twelve steps, source-verified narrative, native searchable text, and 460 live multiline reflection fields in one fillable PDF.</p>
-        <div class="hero-actions">
-          <a class="button primary" href="#release">View release details</a>
-          <a class="button secondary" href="RELEASE_NOTES.md">Read release notes</a>
-        </div>
-      </div>
-      <aside class="release-card" aria-label="Release details">
-        <p class="release-label">Complete workbook</p>
-        <div class="metric"><strong>12</strong><span>steps</span></div>
-        <div class="metric"><strong>243</strong><span>pages</span></div>
-        <div class="metric"><strong>460</strong><span>live fields</span></div>
-        <div class="metric"><strong>v1.0</strong><span>approved release</span></div>
-        <p class="release-note">Every major section starts on a fresh page. Responses are multiline with no character limit.</p>
-      </aside>
-    </section>
-
-    <section class="trust-strip" aria-label="Workbook qualities">
-      <div>Source-verified</div>
-      <div>Native text</div>
-      <div>Fillable PDF</div>
-      <div>Local-first privacy</div>
-    </section>
-
-    <section id="release" class="section-shell section-block">
-      <div class="section-heading">
-        <p class="eyebrow">Definitive release set</p>
-        <h2>The working guide is finished, audited, and packaged.</h2>
-        <p>Version 1.0 consists of the approved complete master workbook plus twelve definitive individual step PDFs. Release manifests and checksums are tracked in this repository; generated binary artifacts are maintained separately from the source tree.</p>
-      </div>
-      <div class="artifact-grid">
-        <article class="artifact-card">
-          <span class="artifact-tag">Master</span>
-          <h3>Complete Interactive Step Working Guide</h3>
-          <p>243 pages with master contents, all twelve steps, bookmarks, and 460 live reflection fields.</p>
-          <code>Complete_Interactive_Step_Working_Guide.pdf</code>
-        </article>
-        <article class="artifact-card">
-          <span class="artifact-tag">Package</span>
-          <h3>12 Individual Step PDFs</h3>
-          <p>Definitive Step One through Step Twelve files, plus manifest and SHA-256 checksums.</p>
-          <code>NA_Step_Working_Guide_Individual_Steps_v1.0.zip</code>
-        </article>
-      </div>
-      <p class="release-links"><a href="release/ARTIFACTS.md">Artifact manifest and checksums</a> · <a href="RELEASE_NOTES.md">Full v1.0 release notes</a></p>
-    </section>
-
-    <section id="steps" class="section-shell section-block step-section">
-      <div class="section-heading">
-        <p class="eyebrow">Workbook map</p>
-        <h2>All twelve steps, one consistent system</h2>
-        <p>The master workbook begins each step on a fresh page and preserves the locked reflection-card design throughout.</p>
-      </div>
-      <div class="step-grid">
-        <div class="step-card"><span>01</span><strong>Step One</strong><small>Master page 3</small></div>
-        <div class="step-card"><span>02</span><strong>Step Two</strong><small>Master page 33</small></div>
-        <div class="step-card"><span>03</span><strong>Step Three</strong><small>Master page 56</small></div>
-        <div class="step-card"><span>04</span><strong>Step Four</strong><small>Master page 75</small></div>
-        <div class="step-card"><span>05</span><strong>Step Five</strong><small>Master page 114</small></div>
-        <div class="step-card"><span>06</span><strong>Step Six</strong><small>Master page 131</small></div>
-        <div class="step-card"><span>07</span><strong>Step Seven</strong><small>Master page 142</small></div>
-        <div class="step-card"><span>08</span><strong>Step Eight</strong><small>Master page 153</small></div>
-        <div class="step-card"><span>09</span><strong>Step Nine</strong><small>Master page 167</small></div>
-        <div class="step-card"><span>10</span><strong>Step Ten</strong><small>Master page 186</small></div>
-        <div class="step-card"><span>11</span><strong>Step Eleven</strong><small>Master page 210</small></div>
-        <div class="step-card"><span>12</span><strong>Step Twelve</strong><small>Master page 228</small></div>
-      </div>
-    </section>
-
-    <section id="about" class="section-shell section-block two-col">
-      <div>
-        <p class="eyebrow">Why this version exists</p>
-        <h2>Built from the source, not from screenshots.</h2>
-        <p>The finished workbook was reconstructed as native digital text and audited against the original source pages. During that audit, condensed and omitted narrative in the earlier browser data was identified and corrected before the final release.</p>
-        <p>The approved PDF is now the canonical version. The earlier browser prototype has been archived in the repository so it cannot be confused with the source-verified workbook.</p>
-      </div>
-      <div class="feature-list">
-        <div><strong>Search and select text</strong><span>No scanned-page layer in the finished workbook.</span></div>
-        <div><strong>Write as much as needed</strong><span>All response fields are multiline with no MaxLen restriction.</span></div>
-        <div><strong>Keep answers local</strong><span>The workbook is designed so responses live in the PDF file the user saves.</span></div>
-        <div><strong>Future archival export</strong><span>An expanded-answer edition is planned so long responses can be re-typeset into flowing pages.</span></div>
-      </div>
-    </section>
-
-    <section class="section-shell release-banner">
-      <div>
-        <p class="eyebrow">Release status</p>
-        <h2>Approved and locked</h2>
-        <p>Version 1.0 was approved October 10, 2026 after source-fidelity, form-structure, persistence, and multi-renderer QA.</p>
-      </div>
-      <a class="button secondary" href="release/ARTIFACTS.md">View manifest</a>
-    </section>
+  <main class="page-shell">
+    <article id="workbook" class="workbook" aria-live="polite"></article>
   </main>
 
-  <footer class="site-footer">
-    <div class="section-shell footer-inner">
-      <p>Independent digital workbook project. Not affiliated with or endorsed by Narcotics Anonymous World Services, Inc.</p>
-      <p><a href="https://github.com/amy2213/step-working-guide">Repository</a> · <a href="RELEASE_NOTES.md">Release notes</a></p>
+  <footer class="footer">
+    <div>
+      <strong>Private by default.</strong> Answers save only in this browser on this device unless you export them.
+    </div>
+    <div class="footer-actions">
+      <button id="prevBtn" type="button" class="text-btn">Previous step</button>
+      <button id="clearBtn" type="button" class="text-btn danger">Clear this step</button>
+      <button id="nextBtn" type="button" class="text-btn">Next step</button>
     </div>
   </footer>
+
+  <script src="archive/browser-prototype/data/step-2.js"></script>
+  <script src="archive/browser-prototype/data/step-3.js"></script>
+  <script src="archive/browser-prototype/data/step-4.js"></script>
+  <script src="archive/browser-prototype/data/step-7.js"></script>
+  <script src="archive/browser-prototype/data/final-source-fixes.js"></script>
+  <script src="data/step-1.js"></script>
+  <script src="data/step-5.js"></script>
+  <script src="data/step-6.js"></script>
+  <script src="data/step-8.js"></script>
+  <script src="data/step-9-part-1.js"></script>
+  <script src="data/step-9-part-2.js"></script>
+  <script src="data/step-9-part-3.js"></script>
+  <script src="data/step-9-part-4.js"></script>
+  <script src="data/step-10-part-1.js"></script>
+  <script src="data/step-10-part-2.js"></script>
+  <script src="data/step-10-part-3.js"></script>
+  <script src="data/step-11-part-1.js"></script>
+  <script src="data/step-11-part-2.js"></script>
+  <script src="data/step-11-part-3.js"></script>
+  <script src="data/step-12-part-1.js"></script>
+  <script src="data/step-12-part-2.js"></script>
+  <script src="data/step-12-part-3.js"></script>
+  <script src="data/bootstrap.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
