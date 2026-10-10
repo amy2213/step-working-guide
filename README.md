@@ -1,23 +1,49 @@
-# Step Working Guide
+# Interactive Step Working Guide
 
-Responsive, local-first digital working-guide prototype.
+A source-verified, native-text, fillable Twelve Step Working Guide workbook.
 
-## Current scope
+## Approved release
 
-- Step One implemented in the original reading/question sequence
-- Native responsive text rather than scanned pages
-- Each reflection question is followed immediately by its own writing field
-- Autosave to local browser storage
-- Hide/show responses
-- Step progress indicator
-- Print / Save as PDF support
-- Hidden source-page metadata retained for QA
+**Version:** 1.0  
+**Approved:** October 10, 2026
 
-## Files
+The approved master workbook contains:
 
-- `index.html` — app shell
-- `styles.css` — locked journal-style design system
-- `app.js` — rendering, autosave, privacy, progress, print behavior
-- `data/step-1.js` — ordered Step One content model
+- 12 steps
+- 243 PDF pages, including master cover and contents
+- 460 live multiline reflection fields
+- no field character limits
+- native selectable/searchable text
+- clickable master contents and step-level navigation
+- source-fidelity corrections identified through a page-by-page audit
 
-The interface is intentionally organized by content flow rather than PDF page breaks.
+The GitHub Pages site documents the approved release, its workbook map, QA status, and artifact checksums. Generated binary release files are maintained separately from the source tree.
+
+## Source fidelity
+
+The earlier browser prototype used structured JavaScript data. During the final PDF build, a full audit found that some narrative in that dataset had been shortened or omitted. The final workbook was therefore rebuilt and verified against the original source pages rather than treating the browser dataset as authoritative.
+
+The **approved v1.0 PDF is the canonical release**.
+
+The previous browser prototype is retained under `archive/browser-prototype/` for development history only. It should not be treated as the canonical text source.
+
+## Repository structure
+
+- `index.html` - GitHub Pages release site
+- `styles.css` - release-site design system
+- `RELEASE_NOTES.md` - v1.0 release notes and QA summary
+- `release/ARTIFACTS.md` - artifact names, counts, and SHA-256 checksums
+- `release/MANIFEST.csv` - machine-readable release manifest
+- `archive/browser-prototype/` - earlier local-first browser prototype
+
+## Privacy
+
+The fillable workbook is designed so responses remain in the PDF file the user saves. The GitHub Pages release site does not collect workbook responses.
+
+## Planned next phase
+
+An **expanded-answer archival export** is planned. It will take completed form responses and rebuild them as flowing native text so long answers can expand naturally across additional pages.
+
+## Disclaimer
+
+Independent digital workbook project. Not affiliated with or endorsed by Narcotics Anonymous World Services, Inc.

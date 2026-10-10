@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f3efe6">
+  <meta name="color-scheme" content="light">
+  <title>Step Working Guide</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand-wrap">
+        <div class="kicker">Interactive Step Working Guide</div>
+        <div id="brandStep" class="brand">Step One</div>
+      </div>
+      <div class="top-actions" aria-label="Workbook actions">
+        <button id="privacyBtn" class="ghost-btn" type="button" aria-pressed="false">Hide responses</button>
+        <button id="exportBtn" class="ghost-btn" type="button">Export</button>
+        <button id="printBtn" class="ghost-btn" type="button">Print / PDF</button>
+      </div>
+    </div>
+
+    <nav class="step-nav" aria-label="Step navigation">
+      <button class="step-tab active" type="button" data-step="1">1</button>
+      <button class="step-tab" type="button" data-step="2">2</button>
+      <button class="step-tab" type="button" data-step="3">3</button>
+      <button class="step-tab" type="button" data-step="4">4</button>
+      <button class="step-tab" type="button" data-step="5">5</button>
+      <button class="step-tab" type="button" data-step="6">6</button>
+      <button class="step-tab" type="button" data-step="7">7</button>
+      <button class="step-tab" type="button" data-step="8">8</button>
+      <button class="step-tab" type="button" data-step="9">9</button>
+      <button class="step-tab" type="button" data-step="10">10</button>
+      <button class="step-tab" type="button" data-step="11">11</button>
+      <button class="step-tab" type="button" data-step="12">12</button>
+    </nav>
+
+    <div class="progress-shell" aria-label="Workbook progress">
+      <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progressFill"></div></div>
+      <div id="progressText" class="progress-text">0 of 0 reflections answered</div>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <article id="workbook" class="workbook" aria-live="polite"></article>
+  </main>
+
+  <footer class="footer">
+    <span>Responses save automatically on this device.</span>
+    <button id="clearBtn" type="button" class="text-btn">Clear saved responses for this step</button>
+  </footer>
+
+  <script src="data/step-1.js"></script>
+  <script src="data/step-2.js"></script>
+  <script src="data/step-3.js"></script>
+  <script src="data/step-4.js"></script>
+  <script src="data/step-5.js"></script>
+  <script src="data/step-5-continuation.js"></script>
+  <script src="data/step-6.js"></script>
+  <script src="data/step-7.js"></script>
+  <script src="data/step-8.js"></script>
+  <script src="data/step-9.js"></script>
+  <script src="data/step-10.js"></script>
+  <script src="data/step-11.js"></script>
+  <script src="data/step-12.js"></script>
+  <script src="data/final-source-fixes.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
